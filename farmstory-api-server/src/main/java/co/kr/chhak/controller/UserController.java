@@ -31,8 +31,7 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-
-    @GetMapping("/user")
+    @PostMapping("/user/login")
     public ResponseEntity login(@RequestBody UserDTO userDTO) {
 
         try {
@@ -55,7 +54,8 @@ public class UserController {
             
             // 토큰 전송
             Map<String, Object> resultMap = new HashMap<>();
-            resultMap.put("grantType", "Bearer");
+            resultMap.put("username", user.getUid());
+            resultMap.put("role", user.getRole());
             resultMap.put("accessToken", accessToken);
             resultMap.put("refreshToken", refreshToken);
 
@@ -63,7 +63,9 @@ public class UserController {
 
         }catch (Exception e) {
             log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("USER NOT FOUND");
         }
 
     }
