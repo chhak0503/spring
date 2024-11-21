@@ -1,11 +1,16 @@
 package co.kr.chhak.service;
 
 import co.kr.chhak.dto.ArticleDTO;
+import co.kr.chhak.dto.PageRequestDTO;
+import co.kr.chhak.dto.PageResponseDTO;
 import co.kr.chhak.entity.Article;
 import co.kr.chhak.entity.User;
 import co.kr.chhak.repository.ArticleRepository;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +22,27 @@ public class ArticleService {
     private final ModelMapper modelMapper;
     private final ArticleRepository articleRepository;
 
-    public List<ArticleDTO> findAll(){
+    public PageResponseDTO findAll(PageRequestDTO pageRequestDTO){
 
-        List<Article> articles = articleRepository.findAll();
+        Pageable pageable = pageRequestDTO.getPageable("no");
 
-        List<ArticleDTO> dtoList = articles.stream().map(entity -> {
-            ArticleDTO articleDTO = modelMapper.map(entity, ArticleDTO.class);
-            articleDTO.setWriter(entity.getUser().getUid());
-            return articleDTO;
-        }).toList();
+        Page<Article> pageArticle = articleRepository.findAllByCate(pageRequestDTO.getCate(), pageable);
 
-        return dtoList;
+        // 엔티티 리스트를 DTO 리스트 변환
+        List<ArticleDTO> articleList = pageArticle.getContent().stream()
+                .map(entity -> {
+                    ArticleDTO articleDTO = modelMapper.map(entity, ArticleDTO.class);
+                    articleDTO.setWriter(entity.getUser().getNick());
+                    return articleDTO;
+                }).toList();
+
+        int total = (int) pageArticle.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(articleList)
+                .total(total)
+                .build();
     }
 
     public int save(ArticleDTO articleDTO) {
