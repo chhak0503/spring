@@ -1,9 +1,6 @@
 package co.kr.chhak.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,8 +21,6 @@ public class User {
     private String nick;
     private String email;
     private String hp;
-
-
     private String role;
     private String zip;
     private String addr1;
