@@ -8,12 +8,27 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
 
     private final ModelMapper modelMapper;
     private final ArticleRepository articleRepository;
+
+    public List<ArticleDTO> findAll(){
+
+        List<Article> articles = articleRepository.findAll();
+
+        List<ArticleDTO> dtoList = articles.stream().map(entity -> {
+            ArticleDTO articleDTO = modelMapper.map(entity, ArticleDTO.class);
+            articleDTO.setWriter(entity.getUser().getUid());
+            return articleDTO;
+        }).toList();
+
+        return dtoList;
+    }
 
     public int save(ArticleDTO articleDTO) {
 
