@@ -28,7 +28,6 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-
     private final JwtProvider jwtProvider;
 
     @Bean
@@ -43,8 +42,8 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/article/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.GET,"/article/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/article/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll()
                 );
 

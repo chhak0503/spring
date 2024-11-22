@@ -26,8 +26,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-
-    @GetMapping("/article/{cate}")
+    @GetMapping("/article/{cate}/{pg}")
     public PageResponseDTO list(PageRequestDTO pageRequestDTO){
 
         PageResponseDTO pageResponseDTO = articleService.findAll(pageRequestDTO);
