@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
@@ -34,8 +33,6 @@ public class ProductService {
     }
 
     public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
-
-
         log.info("pageRequestDTO : " + pageRequestDTO);
 
         Pageable pageable = PageRequest.of(
