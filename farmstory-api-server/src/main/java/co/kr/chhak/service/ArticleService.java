@@ -22,7 +22,7 @@ public class ArticleService {
     private final ModelMapper modelMapper;
     private final ArticleRepository articleRepository;
 
-    public PageResponseDTO findAll(PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<ArticleDTO> findAll(PageRequestDTO pageRequestDTO){
 
         Pageable pageable = pageRequestDTO.getPageable("no");
 
@@ -38,7 +38,7 @@ public class ArticleService {
 
         int total = (int) pageArticle.getTotalElements();
 
-        return PageResponseDTO.builder()
+        return PageResponseDTO.<ArticleDTO>builder()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(articleList)
                 .total(total)
